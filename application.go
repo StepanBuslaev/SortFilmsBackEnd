@@ -75,17 +75,28 @@ func parseFile(file *os.File) (data []Indication, err error) {
 
 // функция сортировки данных по дате. Заменяет ссылку входного среза на отсортированный срез
 func sortByDate(data []Indication) (err error) {
-	/* TODO ...
 	var (
 		sortedData []Indication
+		lenData    int
+		temp       Indication
 	)
+	print(data)
 
-	for _, item := range data {
-		timestamp := item.Date.Unix() // числовое представление даты (секунды с 1 января 1970 года). поле для сортировки
+	// Через алгоритм пузырьковой сортировки
+	lenData = len(data)
+	sortedData = data
+
+	for i := 1; i < lenData; i++ {
+		for j := 0; j < lenData-i; j++ {
+			if data[j].Date.After(data[j+1].Date) {
+				temp = data[j]
+				sortedData[j] = data[j+1]
+				sortedData[j+1] = temp
+			}
+		}
 	}
 
 	data = sortedData
-	*/
 
 	return
 }
@@ -97,10 +108,9 @@ func print(data []Indication) {
 	)
 
 	for _, i := range data {
-		res = fmt.Sprintf("%s", res)
-		res = fmt.Sprintf("value: %v", i.Value) // поле "значение" показания прибора
-		// TODO ...
-		res = fmt.Sprintf("\n")
+		res += fmt.Sprintf("Value: %v | ", i.Value) // поле "значение" показания прибора
+		res += fmt.Sprintf("Indicator: %s | ", i.Indicator)
+		res += fmt.Sprintf("Date: %v %v %v | \n", i.Date.Day(), i.Date.Month(), i.Date.Year())
 	}
 
 	log.Printf(res)
